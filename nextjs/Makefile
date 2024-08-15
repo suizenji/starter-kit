@@ -11,7 +11,7 @@ all: project core base sample jest mock prisma storybook playwright nextauth aws
 project: $(PJ)
 $(PJ):
 	echo '' | npx create-next-app --ts --tailwind --eslint --app --import-alias '@/*' $(PJ)
-	cd $(PJ) && git init && git add . && git commit -m 'create-next-app'
+	-cd $(PJ) && git init && git add . && git commit -m 'create-next-app'
 	cp src/tailwind.config.ts $(PJ)
 
 core: env provider
