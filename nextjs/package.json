@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "format:check": "prettier --config src/.prettierrc --check src catalogs",
+    "format:fix": "prettier --config src/.prettierrc --write src catalogs"
+  },
+  "dependencies": {
+    "prettier": "^3.3.3"
+  }
+}

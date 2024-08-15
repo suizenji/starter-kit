@@ -1,0 +1,45 @@
+docker-compose.yml
+```
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    networks:
+      - app_network
+    environment:
+      - TZ=Asia/Tokyo
+      - POSTGRES_DB=mydb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=Passw0rd
+    ports:
+      - 5432:5432
+
+networks:
+  app_network:
+    driver: bridge
+```
+
+.env
+```
+DATABASE_URL="postgresql://user:Passw0rd@db:5432/mydb?schema=public"
+```
+
+schema.prisma
+```
+ datasource db {
+   provider = "postgresql"
+   url      = env("DATABASE_URL")
+ }
+```
+
+app
+```
+import { prisma } from '@/lib/prisma';
+import type { User } from '@prisma/client';
+const user = await prisma.user.findMany();
+```
+
+GUI
+```
+npx prisma studio
+```

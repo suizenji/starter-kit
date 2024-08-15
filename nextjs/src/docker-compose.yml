@@ -1,0 +1,21 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./dev.Dockerfile
+    image: webapp
+    container_name: node
+    volumes:
+      - ./:/app
+    working_dir: /app
+    environment:
+      - WATCHPACK_POLLING=true # https://github.com/vercel/next.js/issues/36774
+      - TZ=Asia/Tokyo
+    tty: true
+    ports:
+      - '3000:3000'
+      - '5555:5555'
+      - '6006:6006'
+      - '8005:8005'
+      - '8080:8080'
