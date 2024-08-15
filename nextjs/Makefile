@@ -6,6 +6,10 @@ help:
 	@echo '	quick start : make project core sample PJ=quick-start'
 	@echo '	standard    : make project core base jest mock playwright'
 
+shell:
+	docker build . -t starter-kit/nextjs
+	docker run --rm -v ./:/app -w /app -it --entrypoint bash starter-kit/nextjs
+
 all: project core base sample jest mock prisma storybook playwright nextauth aws-ses docker markuplint
 
 project: $(PJ)
