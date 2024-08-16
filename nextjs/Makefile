@@ -2,9 +2,23 @@ PJ := app
 
 help:
 	@echo Next.js starter kit
-	@echo example:
-	@echo '	quick start : make project core sample PJ=quick-start'
-	@echo '	standard    : make project core base jest mock playwright'
+	@echo Examples:
+	@echo '	quick start : make sample PJ=quick-start'
+	@echo '	standard    : make core base jest mock playwright'
+	@echo Targets:
+	@echo '	shell       : exec bash on docker'
+	@echo '	core        : deploy core features'
+	@echo '	base        : deploy develop utils'
+	@echo '	jest        : deploy jest'
+	@echo '	mock        : deploy mock service worker 2'
+	@echo '	prisma      : deploy prisma'
+	@echo '	storybook   : deploy storybook'
+	@echo '	playwright  : deploy playwright'
+	@echo '	nextauth    : deploy nextauth'
+	@echo '	aws-ses     : deploy aws-ses'
+	@echo '	docker      : deploy docker files'
+	@echo '	markuplint  : deploy markuplint'
+	@echo For more informaton, show this Makefile and catalogs directory.
 
 shell:
 	docker build . -t starter-kit/nextjs
@@ -18,7 +32,7 @@ $(PJ):
 	-cd $(PJ) && git init && git add . && git commit -m 'create-next-app'
 	cp src/tailwind.config.ts $(PJ)
 
-core: env provider
+core: project env provider
 env: $(PJ)/.env $(PJ)/config
 $(PJ)/.env:
 	cp src/.env $(PJ)
@@ -30,7 +44,7 @@ $(PJ)/providers:
 	cp -r src/providers $(PJ)
 	cp src/app/layout.tsx $(PJ)/app
 
-base: $(PJ)/Makefile $(PJ)/tools $(PJ)/.eslintrc.js prettier
+base: project $(PJ)/Makefile $(PJ)/tools $(PJ)/.eslintrc.js prettier
 $(PJ)/Makefile:
 	cp src/Makefile $@
 $(PJ)/tools:
@@ -47,7 +61,7 @@ $(PJ)/.prettierrc:
 $(PJ)/.prettierignore:
 	cp src/.prettierignore $@
 
-sample: $(PJ)/app/dev $(PJ)/repositories $(PJ)/components $(PJ)/types
+sample: project core $(PJ)/app/dev $(PJ)/repositories $(PJ)/components $(PJ)/types
 $(PJ)/app/dev:
 	cp -r ./src/app/dev $(PJ)/app
 $(PJ)/repositories:
@@ -57,7 +71,7 @@ $(PJ)/components:
 $(PJ)/types:
 	cp -r ./src/types $(PJ)
 
-jest: $(PJ)/__tests__ $(PJ)/jest.config.ts
+jest: project $(PJ)/__tests__ $(PJ)/jest.config.ts
 $(PJ)/__tests__:
 	cd $(PJ) && npm install -D jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom
 	cd $(PJ) && npm install -D @types/jest ts-node cross-fetch
@@ -65,7 +79,7 @@ $(PJ)/__tests__:
 $(PJ)/jest.config.ts:
 	cp ./src/jest.config.ts $@
 
-mock: $(PJ)/mocks $(PJ)/lib/msw.tsx
+mock: project $(PJ)/mocks $(PJ)/lib/msw.tsx
 $(PJ)/mocks:
 	cd $(PJ) && npm install -D msw@latest @mswjs/data && npx msw init public --save
 	cp -r ./src/mocks $(PJ)
@@ -73,7 +87,7 @@ $(PJ)/lib/msw.tsx:
 	mkdir -p $(PJ)/lib
 	cp ./src/lib/msw.tsx $@
 
-prisma: $(PJ)/prisma $(PJ)/lib/prisma.ts
+prisma: project $(PJ)/prisma $(PJ)/lib/prisma.ts
 $(PJ)/prisma:
 	cd $(PJ) && npm install -D prisma && npx prisma init --datasource-provider sqlite
 	cd $(PJ) && npm install @prisma/client && npm install -D ts-node
@@ -82,18 +96,18 @@ $(PJ)/lib/prisma.ts:
 	mkdir -p $(PJ)/lib
 	cp ./src/lib/prisma.ts $@
 
-storybook: $(PJ)/.storybook
+storybook: project $(PJ)/.storybook
 $(PJ)/.storybook:
 	cd $(PJ) && npx storybook@latest init --no-dev
 	cp src/.storybook/* $@
 
-playwright: $(PJ)/__e2e__
+playwright: project $(PJ)/__e2e__
 $(PJ)/__e2e__:
 	cd $(PJ) && npm init playwright@latest
 	mkdir -p $@
 	cp -r src/__e2e__/* $@
 
-nextauth: $(PJ)/middleware.ts $(PJ)/features/auth $(PJ)/app/api
+nextauth: project $(PJ)/middleware.ts $(PJ)/features/auth $(PJ)/app/api
 $(PJ)/middleware.ts:
 	cd $(PJ) && npm install next-auth
 	cp src/middleware.ts $@
@@ -103,13 +117,13 @@ $(PJ)/features/auth:
 $(PJ)/app/api:
 	cp -r src/app/api $@
 
-aws-ses: $(PJ)/features/mail
+aws-ses: project $(PJ)/features/mail
 $(PJ)/features/mail:
 	cd $(PJ) && npm install @aws-sdk/client-ses nodemailer && npm install -D @types/nodemailer
 	mkdir -p $(PJ)/features/mail
 	cp -r src/features/mail/* $@
 
-docker: $(PJ)/Dockerfile $(PJ)/dev.Dockerfile $(PJ)/docker-compose.yml
+docker: project $(PJ)/Dockerfile $(PJ)/dev.Dockerfile $(PJ)/docker-compose.yml
 $(PJ)/Dockerfile:
 	cp src/Dockerfile $@
 $(PJ)/dev.Dockerfile:
@@ -117,7 +131,7 @@ $(PJ)/dev.Dockerfile:
 $(PJ)/docker-compose.yml:
 	cp src/docker-compose.yml $@
 
-markuplint: $(PJ)/.markuplintrc
+markuplint: project $(PJ)/.markuplintrc
 $(PJ)/.markuplintrc:
 	cd $(PJ) && npm install -D markuplint @markuplint/jsx-parser @markuplint/react-spec
 	cp src/.markuplintrc $@
