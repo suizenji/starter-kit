@@ -103,7 +103,7 @@ $(PJ)/.storybook:
 
 playwright: project $(PJ)/__e2e__
 $(PJ)/__e2e__:
-	cd $(PJ) && npm init playwright@latest
+	cd $(PJ) && npm init playwright@latest && npm install -D @axe-core/playwright
 	mkdir -p $@
 	cp -r src/__e2e__/* $@
 

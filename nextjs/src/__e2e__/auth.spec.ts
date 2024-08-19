@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { AxeBuilder } from '@axe-core/playwright';
 
 require('@/__e2e__/functions').configAdmin();
 
@@ -6,6 +7,14 @@ test.describe('sample', () => {
   test('private', async ({ page }) => {
     await page.goto('/');
     await page.waitForURL('/');
+
+    const results = await new AxeBuilder({ page }).analyze();
+
+    results.violations.forEach((violation) => {
+      console.log(violation.description);
+    });
+
+    // expect(results.violations.length).toBe(0);
   });
 });
 
