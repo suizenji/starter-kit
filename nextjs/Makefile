@@ -21,8 +21,8 @@ help:
 	@echo For more informaton, show this Makefile and catalogs directory.
 
 shell:
-	docker build . -t starter-kit/nextjs
-	docker run --rm -v ./:/app -w /app -it --entrypoint bash starter-kit/nextjs
+	docker image inspect starter-kit/nextjs > /dev/null || docker build . -t starter-kit/nextjs
+	docker run --rm -v ./:/app -w /app -it starter-kit/nextjs bash
 
 all: project core base sample jest mock prisma storybook playwright nextauth aws-ses docker markuplint
 
