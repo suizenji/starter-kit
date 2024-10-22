@@ -1,2 +1,1 @@
-import { find } from './google';
-export const googleRepository = { find };
+export * as googleRepository from './google';
