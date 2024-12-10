@@ -11,6 +11,13 @@ const userHandler = http.get(
       where: { id: { equals: id } },
     });
 
+    /*
+    const result = db.user.update({
+      where: { id: { equals: id } },
+      data: user,
+    })
+    */
+
     return HttpResponse.json(user);
   },
 );
