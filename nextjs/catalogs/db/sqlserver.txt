@@ -12,5 +12,5 @@ mssql-init:
 	sudo docker exec -it sql1 bash -c "echo -e 'CREATE DATABASE test; \\n\
 SELECT Name from sys.databases; \\n\
 GO \\n\
-' | /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '<YourStrong@Passw0rd>'"
+' | /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P '<YourStrong@Passw0rd>'"
 ```
