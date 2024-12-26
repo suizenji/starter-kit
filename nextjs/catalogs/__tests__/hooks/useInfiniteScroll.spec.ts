@@ -69,7 +69,15 @@ describe('useInfiniteScroll', () => {
     });
     expect(loadMore).toHaveBeenCalledTimes(1);
 
+    // 上方向のスクロールには反応しない
+    mockDiv.scrollTop = 899;
+    act(() => {
+      scrollHandler();
+    });
+    expect(loadMore).toHaveBeenCalledTimes(1);
+
     // isLoadingならスクロールが閾値を越えてもloadしない
+    mockDiv.scrollTop = 900;
     isLoading = true;
     rerender();
     act(() => {

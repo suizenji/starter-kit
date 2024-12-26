@@ -20,16 +20,25 @@ export function useInfiniteScroll({
 }: IUseInfiniteScroll): IUseInfiniteScrollReturn {
   const tableEl = useRef<HTMLDivElement>(null);
   const [distanceBottom, setDistanceBottom] = useState(0);
+  const lastScrollTop = useRef(0);
 
   const scrollListener = useCallback(() => {
     if (!tableEl.current) return;
+
+    // スクロールの見えていない部分の長さを取得
     const bottom = tableEl.current.scrollHeight - tableEl.current.clientHeight;
 
+    // 初回のみ閾値を設定。以後、残スクロール量がその高さを割ったら通信する。
     if (!distanceBottom) {
       setDistanceBottom(Math.round(bottom * 0.2));
     }
 
+    // scrollの方向を取得
+    const isDown = tableEl.current.scrollTop > lastScrollTop.current;
+    lastScrollTop.current = tableEl.current.scrollTop;
+
     if (
+      isDown &&
       tableEl.current.scrollTop > bottom - distanceBottom &&
       hasMore &&
       !isLoading
