@@ -60,3 +60,31 @@ export function useInfiniteScroll({
 
   return { tableEl };
 }
+
+export function useGlobalScroll({
+  loadMore,
+  hasMore,
+  isLoading,
+}: IUseInfiniteScroll) {
+  const lastScrollTop = useRef(0);
+
+  const scrollListener = useCallback(() => {
+    const pageHeight = document.body.clientHeight;
+    const triggerHeight = pageHeight * 0.8;
+
+    const isDown = window.scrollY > lastScrollTop.current;
+    lastScrollTop.current = window.scrollY;
+
+    if (isDown && window.scrollY > triggerHeight && hasMore && !isLoading) {
+      loadMore();
+    }
+  }, [hasMore, loadMore, isLoading]);
+
+  useLayoutEffect(() => {
+    window.addEventListener('scroll', scrollListener);
+
+    return () => {
+      window.removeEventListener('scroll', scrollListener);
+    };
+  }, [scrollListener]);
+}
