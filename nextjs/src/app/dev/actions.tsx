@@ -11,3 +11,15 @@ export async function sendMail() {
 
   return Math.random();
 }
+
+export async function handleForm(formData: FormData) {
+  for (let i = 0; i < 100000; i++) {
+    for (let j = 0; j < 100000; j++) {
+      // do nothing
+    }
+  }
+
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+};

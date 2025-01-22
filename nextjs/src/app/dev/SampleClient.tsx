@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useActionState, useTransition } from 'react';
+import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/Button';
-import { sendMail } from './actions';
+import { sendMail, handleForm } from './actions';
 
 async function increment(previous: number, formData: FormData) {
   return new Promise<number>((resolve) => {
@@ -41,6 +42,10 @@ export default function Sample() {
       <div>
         <Button onClick={handleSendMail}>server action</Button>
       </div>
+      <form action={handleForm}>
+        <input type="text" name="username" />
+        <Submit />
+      </form>
       <div>
         <form>
           <button formAction={formAction}>form action</button>
@@ -51,5 +56,14 @@ export default function Sample() {
         <Button onClick={handleTran}>tran: {isPendingTran ? 'isPenging' : tranNum}</Button>
       </div>
     </div>
+  );
+}
+
+function Submit() {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? "Submitting..." : "Submit"}
+    </button>
   );
 }
