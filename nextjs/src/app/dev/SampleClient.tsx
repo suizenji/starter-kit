@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useState, useActionState, useTransition } from 'react';
 import { Button } from '@/components/Button';
 import { sendMail } from './actions';
 
@@ -13,10 +13,27 @@ async function increment(previous: number, formData: FormData) {
 }
 
 export default function Sample() {
+  const [tranNum, setTranNum] = useState(0);
+  const [isPendingTran, startTransition] = useTransition();
+
   const [state, formAction, isPending] = useActionState(increment, 0);
 
   const handleSendMail = () => {
     sendMail();
+  };
+
+  const handleTran = async () => {
+    startTransition(async () => {
+      console.log('tran');
+
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(1);
+        }, 1000);
+      });
+
+      setTranNum(tranNum + 1);
+    });
   };
 
   return (
@@ -29,6 +46,9 @@ export default function Sample() {
           <button formAction={formAction}>form action</button>
           {isPending ? 'isPending...' : state}
         </form>
+      </div>
+      <div>
+        <Button onClick={handleTran}>tran: {isPendingTran ? 'isPenging' : tranNum}</Button>
       </div>
     </div>
   );
