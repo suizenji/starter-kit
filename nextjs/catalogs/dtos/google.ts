@@ -4,6 +4,8 @@
 import { googleRepository } from '@/repositories';
 import { getSession } from '@/features/auth';
 
+// policies/dataやbusesみたいなの作るでもいいかも。
+
 export async function canFind() {
   const user = (await getSession())?.user;
   if (!user) return false;
