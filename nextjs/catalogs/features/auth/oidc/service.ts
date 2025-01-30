@@ -1,7 +1,7 @@
 import IdTokenVerifier from 'idtoken-verifier';
-import { getMeta, getJWKs, refresh } from './repository';
-
-const CLIENT_ID = '';
+import { CLIENT_ID } from '@/config/env';
+import { getMeta, getJWKs, refresh } from './fetch';
+import { getDate } from '@/utils/date';
 
 // @see https://openid-foundation-japan.github.io/openid-connect-core-1_0.ja.html#IDTokenValidation
 export async function validateTokens(
@@ -49,10 +49,6 @@ export async function validateIDToken(
     });
   });
 
-  if (error) {
-    // logger.warn(error);
-  }
-
   return !error;
 }
 
@@ -84,8 +80,7 @@ export function validateTokenExp(idToken: string) {
   const expTimeDate = new Date(0);
   expTimeDate.setUTCSeconds(exp);
 
-  // NOTE: 日付を固定できると検証やテストで便利。
-  const now = new Date();
+  const now = getDate();
 
   return now < expTimeDate;
 }
@@ -95,7 +90,7 @@ export async function validateAccessToken(
   atHash: string,
 ): Promise<boolean> {
   const verifier = new IdTokenVerifier({
-    issuer: 'dummy',
+    issuer: 'issuer',
     audience: CLIENT_ID,
   });
 
@@ -107,7 +102,6 @@ export async function validateAccessToken(
     alg,
     atHash,
     (error) => {
-      // if (error) logger.warn(error);
       return !error;
     },
   );
@@ -115,7 +109,7 @@ export async function validateAccessToken(
   return accessTokenIsValid;
 }
 
-export async function refreshTokens(metaUri: string, refreshToken: string) {
+export async function tokenRefresh(metaUri: string, refreshToken: string) {
   const meta = await getMeta(metaUri);
   return refresh(meta.token_endpoint, refreshToken);
 }

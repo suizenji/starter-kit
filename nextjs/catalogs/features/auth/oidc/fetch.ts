@@ -1,22 +1,20 @@
-const CLIENT_ID = '';
-const CLIENT_SECRET = '';
+import { CLIENT_ID, CLIENT_SECRET } from '@/config';
 
 export async function getMeta(uri: string) {
-  const res = await fetch(uri, { next: { revalidate: 60 } });
+  const res = await fetch(uri, { next: { revalidate: 300 } });
   return res.json();
 }
 
 export async function getJWKs(uri: string) {
-  const res = await fetch(uri, { next: { revalidate: 60 } });
+  const res = await fetch(uri, { next: { revalidate: 300 } });
   return res.json();
 }
 
 export async function refresh(uri: string, refreshToken: string) {
   const body = `grant_type=refresh_token&refresh_token=${refreshToken}`;
-
-  const basicBase64 = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString(
-    'base64',
-  );
+  const basicBase64 = Buffer.from(
+    `${CLIENT_ID}:${CLIENT_SECRET}`,
+  ).toString('base64');
   const headers = {
     Authorization: `Basic ${basicBase64}`,
     'Content-Type': 'application/x-www-form-urlencoded',
