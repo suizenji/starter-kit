@@ -4,7 +4,7 @@ import { userGetController } from './user-controller';
 import { usersGetController } from './users-controller';
 import { findGetController, findGetValidator } from './find-controller';
 
-export function bind(app: Express) {
+export function route(app: Express) {
   app.get('/users', usersGetController);
   app.get('/users/:id', userGetController);
   app.get('/find-user', findGetValidator, invalidHandler, findGetController);

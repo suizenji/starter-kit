@@ -1,8 +1,8 @@
 import type { Express, Request, Response } from 'express';
-import { bind as bindUser } from './user/route';
+import { route as routeUser } from './user/route';
 
-export function bind(app: Express) {
-  bindUser(app);
+export function route(app: Express) {
+  routeUser(app);
 
   app.get('/', (req: Request, res: Response) => {
     console.log(`[/][GET] pid = ${process.pid}`);
