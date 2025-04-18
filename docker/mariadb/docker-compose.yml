@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  db:
+    name: mariadb
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    volumes:
+      - ./initsql:/docker-entrypoint-initdb.d
+      - ./conf.d:/etc/mysql/conf.d
+      - ./db-volume:/var/lib/mysql
+    networks:
+      - marianet
+
+  adminer:
+    name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  db-volume:
+    name: mariadb-data
+    driver: local
+
+networks:
+  marianet:
+    external: true
