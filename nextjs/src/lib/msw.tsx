@@ -13,7 +13,8 @@ export const MSWWrapper = ({ children }: MSWWrapperProps) => {
 
 export async function setup() {
   if (IS_BROWSER && API_MOCKING) {
-    const { worker } = require('@/mocks/browser');
+    // const { worker } = require('@/mocks/browser');
+    const { worker } = await import('@/mocks/browser');
     await worker.start();
     seed();
   }
