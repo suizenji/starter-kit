@@ -1,17 +1,19 @@
 PJ := app
+DB_P := sqlite
 
 help:
 	@echo Next.js starter kit
 	@echo Examples:
 	@echo '	quick start : make sample PJ=quick-start'
 	@echo '	standard    : make core base jest mock playwright'
+	@echo '	prisma      : make prisma DB_P=postgresql'
 	@echo Targets:
 	@echo '	shell       : exec bash on docker'
 	@echo '	core        : deploy core features'
 	@echo '	base        : deploy develop utils'
 	@echo '	jest        : deploy jest'
 	@echo '	mock        : deploy mock service worker 2'
-	@echo '	prisma      : deploy prisma'
+	@echo '	prisma      : deploy prisma (default provider: sqlite)'
 	@echo '	storybook   : deploy storybook'
 	@echo '	playwright  : deploy playwright'
 	@echo '	nextauth    : deploy nextauth'
@@ -89,9 +91,10 @@ $(PJ)/lib/msw.tsx:
 
 prisma: project $(PJ)/prisma $(PJ)/lib/prisma.ts
 $(PJ)/prisma:
-	cd $(PJ) && npm install -D prisma && npx prisma init --datasource-provider sqlite
+	cd $(PJ) && npm install -D prisma && npx prisma init --datasource-provider $(DB_P) --output ../generated/prisma
 	cd $(PJ) && npm install @prisma/client && npm install -D ts-node
 	cp -r ./src/prisma $(PJ)
+	printf '\n# prisma\ngenerated/prisma/' >> $(PJ)/.gitignore
 $(PJ)/lib/prisma.ts:
 	mkdir -p $(PJ)/lib
 	cp ./src/lib/prisma.ts $@
