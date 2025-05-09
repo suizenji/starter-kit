@@ -39,7 +39,7 @@ describe('component rendering sample', () => {
 
 /* // TODO: prisma
 import { prisma } from '@/lib/prisma';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User } from '@/generated/prisma/client';
 type UserInput = Prisma.UserCreateInput;
 
 test('prisma', async () => {
