@@ -1,0 +1,43 @@
+# nodejs sample: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+# nodejs cache: https://dev.classmethod.jp/articles/caching-dependencies-in-workflow-execution-on-github-actions/
+# coverage: https://github.com/marketplace/actions/jest-coverage-report
+
+name: awesome-name
+run-name: Good Job, ${{ github.actor }}🎉
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+      - uses: actions/cache@v3
+        id: node_modules_cache_id
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      - if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
+        run: npm install
+      - run: npm audit --omit=dev --audit-level=moderate
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          annotations: failed-tests
+          skip-step: install
