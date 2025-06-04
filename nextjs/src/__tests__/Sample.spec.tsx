@@ -5,14 +5,15 @@ import SampleServer from '@/app/dev/SampleServer';
 
 describe('fetch test sample', () => {
   test('GET', async () => {
-    const res = await fetch('https://www.google.com');
+    const res = await fetch('https://httpbin.org/get');
     expect(res.status).toBe(200);
   });
 
   test('POST', async () => {
     const body = JSON.stringify({ a: 1 });
-    const res = await fetch('https://www.google.com', { method: 'post', body });
-    expect(res.status).toBeGreaterThan(1);
+    const res = await fetch('https://httpbin.org/post', { method: 'post', body });
+    const json = await res.json();
+    expect(json.data).toBe(body);
   });
 });
 
