@@ -75,7 +75,7 @@ $(PJ)/types:
 
 jest: project $(PJ)/__tests__ $(PJ)/jest.config.ts
 $(PJ)/__tests__:
-	cd $(PJ) && npm install -D jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom
+	cd $(PJ) && npm install -D jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event
 	cd $(PJ) && npm install -D @types/jest ts-node cross-fetch
 	cp -r ./src/__tests__ $(PJ)
 $(PJ)/jest.config.ts:
