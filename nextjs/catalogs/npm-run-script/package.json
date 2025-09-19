@@ -15,7 +15,7 @@
     "e2e:manual": "playwright test --grep @manual",
     "e2e:smoke": "playwright test --grep @smoke",
     "lint:es": "next lint",
-    "lint:markup": "markuplint \"{app,components,features}/**/*.{jsx,tsx}\"",
+    "lint:markup": "markuplint -p \"{app,components,features}/**/*.{jsx,tsx}\"",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "db:seed": "tsx prisma/seed.ts",
