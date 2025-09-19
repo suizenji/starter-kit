@@ -9,7 +9,17 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+  // relationMode = "prisma" // appでrelationを再現
 }
+
+/* 自動でER図を生成
+// "db:erd": "cross-env DISABLE_ERD=false prisma generate",
+generator erd {
+  provider = "prisma-erd-generator"
+  output = "./ERD.pdf"
+  includeRelationFromFields = true
+}
+*/
 
 // ファイル分割の方法 https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema
 
