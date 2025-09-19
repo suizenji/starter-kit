@@ -1,6 +1,9 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
+import KeycloakProvider from 'next-auth/providers/keycloak';
 import type { NextAuthOptions } from 'next-auth';
 import type { User } from './types';
+const KC_META_URI =
+  'http://localhost:8080/realms/xxx/.well-known/openid-configuration';
 
 // https://next-auth.js.org/configuration/options#options
 export const authOptions: NextAuthOptions = {
@@ -24,6 +27,21 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const user: User = { id: credentials?.id ?? '', role: 'guest' };
         return user;
+      },
+    }),
+    KeycloakProvider({
+      clientId: 'xxx',
+      clientSecret: '',
+      wellKnown: KC_META_URI,
+      checks: ['pkce', 'state', 'nonce'],
+      authorization: { params: { scope: 'openid offline_access' } },
+      profile(profile, tokens) {
+        return {
+          id: profile.sub,
+          profile,
+          tokens,
+          metaUri: KC_META_URI,
+        };
       },
     }),
   ],
